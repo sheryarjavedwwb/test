@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sheryar Javed — Frontend Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+  --c1:#ff3cac;   /* hot pink */
+  --c2:#784ba0;   /* purple */
+  --c3:#2b86c5;   /* blue */
+  --c4:#ffdd00;   /* yellow */
+  --c5:#00f5a0;   /* mint */
+  --c6:#ff6b35;   /* orange */
+  --bg:#0a0a0f;
+  --bg2:#111118;
+  --text:#f0eef8;
+  --muted:#888899;
+  --card:rgba(255,255,255,0.04);
+  --border:rgba(255,255,255,0.08);
+}
+
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;overflow-x:hidden;cursor:none;}
+
+/* cursor */
+#cur{position:fixed;width:14px;height:14px;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;background:#fff;transition:transform .15s;}
+#cur-trail{position:fixed;width:40px;height:40px;border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);border:1.5px solid rgba(255,60,172,.5);transition:left .1s,top .1s;}
+
+/* noise texture */
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.4;
+}
+
+/* ===== NAV ===== */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.2rem 4rem;
+  background:rgba(10,10,15,.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:1.6rem;
+  background:linear-gradient(90deg,var(--c1),var(--c4));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:.05em;
+}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);text-decoration:none;text-transform:uppercase;letter-spacing:.1em;transition:color .2s;}
+.nav-links a:hover{color:var(--c1);}
+.nav-cta{
+  font-family:'Space Mono',monospace;font-size:.72rem;
+  padding:.55rem 1.4rem;background:var(--c1);color:#fff;border:none;
+  text-decoration:none;letter-spacing:.08em;text-transform:uppercase;
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+  transition:all .2s;
+}
+.nav-cta:hover{background:var(--c4);color:var(--bg);}
+
+/* ===== HERO ===== */
+#hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding:8rem 4rem 4rem;position:relative;overflow:hidden;
+}
+
+/* big background letters */
+.hero-bg-text{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(14rem,22vw,22rem);
+  color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.04);
+  white-space:nowrap;pointer-events:none;user-select:none;letter-spacing:-.02em;
+  z-index:0;
+}
+
+/* blobs */
+.blob{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;opacity:.35;}
+.b1{width:500px;height:500px;background:var(--c1);top:-150px;right:-100px;}
+.b2{width:400px;height:400px;background:var(--c3);bottom:-100px;left:-80px;}
+.b3{width:300px;height:300px;background:var(--c4);top:40%;right:30%;}
+
+.hero-content{position:relative;z-index:1;max-width:900px;}
+.hero-chip{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-family:'Space Mono',monospace;font-size:.72rem;
+  background:rgba(255,60,172,.12);border:1px solid rgba(255,60,172,.3);
+  color:var(--c1);padding:.4rem 1rem;margin-bottom:2rem;letter-spacing:.08em;
+}
+.hero-chip::before{content:'';width:7px;height:7px;background:var(--c5);border-radius:50%;animation:blink 1.5s infinite;}
+@keyframes blink{50%{opacity:0;}}
+
+.hero-greeting{
+  font-family:'Space Mono',monospace;font-size:.85rem;
+  color:var(--c5);letter-spacing:.1em;margin-bottom:.75rem;
+}
+.hero-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(5rem,12vw,10rem);line-height:.9;letter-spacing:-.01em;
+  margin-bottom:.5rem;
+}
+.hero-name .sher{color:var(--c4);}
+.hero-name .yar{
+  -webkit-text-stroke:2px var(--c1);color:transparent;
+}
+.hero-title{
+  font-size:clamp(1.1rem,2.5vw,1.6rem);font-weight:300;color:var(--muted);
+  margin:.8rem 0 2rem;letter-spacing:.02em;
+}
+.hero-title b{color:var(--c1);font-weight:700;}
+
+.hero-desc{
+  max-width:520px;color:var(--muted);font-size:1rem;line-height:1.8;margin-bottom:2.5rem;
+}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;}
+
+.btn-main{
+  padding:.9rem 2.5rem;font-family:'Outfit',sans-serif;font-weight:700;font-size:.95rem;
+  background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;
+  text-decoration:none;border:none;letter-spacing:.04em;
+  transition:transform .2s,box-shadow .2s;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+.btn-main:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(255,60,172,.4);}
+.btn-ghost{
+  padding:.9rem 2.5rem;font-family:'Outfit',sans-serif;font-weight:600;font-size:.95rem;
+  background:transparent;border:1.5px solid rgba(255,255,255,.15);color:var(--text);
+  text-decoration:none;letter-spacing:.04em;transition:all .2s;
+}
+.btn-ghost:hover{border-color:var(--c5);color:var(--c5);}
+
+/* floating badges */
+.hero-badges{
+  position:absolute;right:6%;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:1rem;z-index:1;
+}
+.hb{
+  padding:.6rem 1.1rem;font-family:'Space Mono',monospace;font-size:.68rem;
+  border:1px solid var(--border);background:rgba(255,255,255,.03);
+  letter-spacing:.06em;transition:all .3s;white-space:nowrap;
+}
+.hb:hover{border-color:var(--c1);background:rgba(255,60,172,.08);}
+.hb span{margin-right:.4rem;}
+
+/* ===== MARQUEE ===== */
+.marquee-wrap{
+  padding:1.2rem 0;background:var(--c1);overflow:hidden;
+  position:relative;z-index:1;display:flex;
+}
+.marquee-track{
+  display:flex;gap:3rem;white-space:nowrap;
+  animation:marquee 22s linear infinite;
+}
+.marquee-track2{animation-direction:reverse;animation-duration:28s;}
+@keyframes marquee{to{transform:translateX(-50%);}}
+.marquee-item{
+  font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.15em;color:#fff;
+}
+.marquee-item .dot{color:rgba(255,255,255,.4);margin:0 1rem;}
+
+/* ===== ABOUT ===== */
+#about{padding:8rem 4rem;position:relative;z-index:1;}
+.about-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:6rem;align-items:center;}
+
+/* photo card */
+.photo-card{
+  position:relative;
+}
+.photo-frame{
+  width:100%;aspect-ratio:3/4;background:var(--bg2);border:1px solid var(--border);
+  position:relative;overflow:hidden;
+  clip-path:polygon(0 0,calc(100% - 24px) 0,100% 24px,100% 100%,24px 100%,0 calc(100% - 24px));
+}
+.photo-inner{
+  width:100%;height:100%;
+  background:linear-gradient(135deg,rgba(255,60,172,.15),rgba(43,134,197,.15));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:8rem;letter-spacing:.1em;
+  color:rgba(255,255,255,.06);
+}
+/* initials overlay */
+.photo-initials{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:1rem;
+}
+.initials-big{
+  font-family:'Bebas Neue',sans-serif;font-size:9rem;line-height:1;
+  background:linear-gradient(135deg,var(--c1),var(--c4));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.initials-label{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);letter-spacing:.15em;}
+
+.photo-accent{
+  position:absolute;top:-12px;right:-12px;
+  width:60px;height:60px;background:var(--c4);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:.75rem;color:var(--bg);
+  text-align:center;line-height:1.2;letter-spacing:.05em;
+}
+.photo-tag{
+  position:absolute;bottom:2rem;left:-1.5rem;
+  background:var(--bg);border:1px solid var(--border);
+  padding:.7rem 1.2rem;font-family:'Space Mono',monospace;font-size:.68rem;
+  color:var(--c5);letter-spacing:.06em;
+}
+
+.section-tag{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--c1);letter-spacing:.2em;text-transform:uppercase;display:block;margin-bottom:.8rem;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,5vw,4.5rem);line-height:.95;letter-spacing:-.01em;margin-bottom:1.5rem;}
+.section-title .hl{
+  background:linear-gradient(90deg,var(--c1),var(--c4));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+.about-text p{color:var(--muted);line-height:1.9;margin-bottom:1.1rem;font-size:1rem;}
+.about-text p strong{color:var(--text);}
+
+.about-facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:2rem;}
+.fact{background:var(--bg);padding:1.2rem;transition:background .2s;}
+.fact:hover{background:var(--bg2);}
+.fact-val{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--c1);line-height:1;}
+.fact-key{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:.1em;margin-top:.2rem;}
+
+/* ===== SKILLS ===== */
+#skills{padding:8rem 4rem;background:var(--bg2);position:relative;z-index:1;overflow:hidden;}
+#skills::before{
+  content:'SKILLS';position:absolute;right:-2rem;top:50%;transform:translateY(-50%) rotate(90deg);
+  font-family:'Bebas Neue',sans-serif;font-size:12rem;
+  color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.03);
+  pointer-events:none;
+}
+
+.skills-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+
+.skill-group{margin-bottom:2rem;}
+.skill-group-name{
+  font-family:'Bebas Neue',sans-serif;font-size:1.5rem;
+  color:var(--c4);letter-spacing:.05em;margin-bottom:1.2rem;
+  display:flex;align-items:center;gap:.75rem;
+}
+.skill-group-name::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.skill-row{margin-bottom:.9rem;}
+.skill-meta{display:flex;justify-content:space-between;margin-bottom:.4rem;}
+.skill-name{font-size:.88rem;font-weight:600;}
+.skill-pct{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);}
+.skill-track{height:4px;background:rgba(255,255,255,.06);border-radius:0;overflow:hidden;}
+.skill-fill{height:100%;border-radius:0;transition:width 1s ease;}
+
+/* skill bubbles */
+.skill-bubbles{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem;}
+.bubble{
+  font-family:'Space Mono',monospace;font-size:.65rem;padding:.35rem .8rem;
+  border:1px solid var(--border);color:var(--muted);letter-spacing:.06em;
+  transition:all .2s;
+}
+.bubble:hover{color:var(--c1);border-color:var(--c1);background:rgba(255,60,172,.06);}
+.bubble.hot{border-color:rgba(255,60,172,.4);color:var(--c1);background:rgba(255,60,172,.06);}
+.bubble.warm{border-color:rgba(255,221,0,.4);color:var(--c4);background:rgba(255,221,0,.05);}
+.bubble.cool{border-color:rgba(0,245,160,.4);color:var(--c5);background:rgba(0,245,160,.05);}
+.bubble.blue{border-color:rgba(43,134,197,.4);color:#5ab3f0;background:rgba(43,134,197,.05);}
+
+/* ===== PROJECTS ===== */
+#projects{padding:8rem 4rem;position:relative;z-index:1;}
+
+.projects-filter{display:flex;gap:.6rem;margin-bottom:3rem;flex-wrap:wrap;}
+.filter-btn{
+  font-family:'Space Mono',monospace;font-size:.68rem;padding:.4rem 1rem;
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  cursor:pointer;letter-spacing:.08em;text-transform:uppercase;transition:all .2s;
+}
+.filter-btn.active,.filter-btn:hover{background:var(--c1);border-color:var(--c1);color:#fff;}
+
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.proj-card{
+  background:var(--card);border:1px solid var(--border);
+  position:relative;overflow:hidden;transition:transform .3s,border-color .3s;
+  display:flex;flex-direction:column;
+}
+.proj-card:hover{transform:translateY(-6px);}
+.proj-card:hover .proj-thumb-fill{transform:scale(1.05);}
+
+.proj-thumb{height:180px;overflow:hidden;position:relative;}
+.proj-thumb-fill{
+  width:100%;height:100%;transition:transform .5s;
+  display:flex;align-items:center;justify-content:center;
+}
+.proj-thumb svg{width:100%;height:100%;}
+
+.proj-body{padding:1.5rem;flex:1;display:flex;flex-direction:column;}
+.proj-cat{
+  font-family:'Space Mono',monospace;font-size:.62rem;
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:.6rem;
+}
+.proj-name{font-size:1.1rem;font-weight:700;margin-bottom:.6rem;line-height:1.2;}
+.proj-desc{color:var(--muted);font-size:.85rem;line-height:1.7;flex:1;margin-bottom:1.2rem;}
+.proj-stack{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.proj-tag{
+  font-family:'Space Mono',monospace;font-size:.6rem;
+  padding:.2rem .55rem;border:1px solid var(--border);color:var(--muted);
+}
+.proj-links{display:flex;gap:1rem;margin-top:auto;}
+.proj-link{
+  font-family:'Space Mono',monospace;font-size:.7rem;
+  text-decoration:none;letter-spacing:.05em;transition:opacity .2s;
+}
+.proj-link:hover{opacity:.7;}
+
+/* card color themes */
+.proj-card.p1{border-top:2px solid var(--c1);}
+.proj-card.p1:hover{border-color:var(--c1);}
+.proj-card.p2{border-top:2px solid var(--c4);}
+.proj-card.p2:hover{border-color:var(--c4);}
+.proj-card.p3{border-top:2px solid var(--c5);}
+.proj-card.p3:hover{border-color:var(--c5);}
+.proj-card.p4{border-top:2px solid var(--c3);}
+.proj-card.p4:hover{border-color:var(--c3);}
+.proj-card.p5{border-top:2px solid var(--c6);}
+.proj-card.p5:hover{border-color:var(--c6);}
+
+/* ===== EXPERIENCE ===== */
+#experience{padding:8rem 4rem;background:var(--bg2);position:relative;z-index:1;}
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
+
+.timeline{padding-left:1.5rem;border-left:1px solid var(--border);position:relative;}
+.timeline::before{
+  content:'';position:absolute;top:0;left:-1px;width:2px;height:60px;
+  background:linear-gradient(to bottom,var(--c1),transparent);
+}
+.tl-item{margin-bottom:2.8rem;position:relative;}
+.tl-dot{
+  position:absolute;left:-1.87rem;top:4px;
+  width:12px;height:12px;
+  background:var(--c1);
+  clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);
+}
+.tl-dot.v2{background:var(--c4);}
+.tl-dot.v3{background:var(--c5);}
+.tl-dot.v4{background:var(--c3);}
+.tl-date{
+  font-family:'Space Mono',monospace;font-size:.68rem;color:var(--c1);
+  letter-spacing:.1em;margin-bottom:.5rem;
+}
+.tl-role{font-size:1.05rem;font-weight:700;margin-bottom:.2rem;}
+.tl-company{font-size:.85rem;color:var(--muted);margin-bottom:.6rem;}
+.tl-desc{color:var(--muted);font-size:.85rem;line-height:1.75;}
+
+/* right side — fun chart */
+.chart-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--c4);margin-bottom:1.5rem;letter-spacing:.05em;}
+.donut-wrap{display:flex;align-items:center;gap:2rem;margin-bottom:2rem;}
+.donut-legend{display:flex;flex-direction:column;gap:.75rem;}
+.legend-item{display:flex;align-items:center;gap:.75rem;}
+.legend-dot{width:10px;height:10px;flex-shrink:0;}
+.legend-label{font-size:.85rem;font-weight:600;}
+.legend-pct{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);margin-left:auto;}
+
+.passion-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-top:1.5rem;}
+.passion-item{
+  background:var(--card);border:1px solid var(--border);
+  padding:1rem;display:flex;align-items:center;gap:.75rem;
+  transition:all .2s;
+}
+.passion-item:hover{border-color:var(--c1);}
+.passion-icon{font-size:1.3rem;}
+.passion-name{font-size:.82rem;font-weight:600;}
+
+/* ===== CONTACT ===== */
+#contact{padding:8rem 4rem;position:relative;z-index:1;overflow:hidden;}
+#contact::before{
+  content:'HI!';position:absolute;right:-2rem;bottom:-4rem;
+  font-family:'Bebas Neue',sans-serif;font-size:20rem;
+  color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.03);
+  pointer-events:none;line-height:1;
+}
+
+.contact-inner{max-width:760px;margin:0 auto;text-align:center;}
+.contact-eyebrow{
+  font-family:'Space Mono',monospace;font-size:.75rem;
+  color:var(--c5);letter-spacing:.15em;margin-bottom:1rem;display:block;
+}
+.contact-heading{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3.5rem,8vw,7rem);line-height:.92;letter-spacing:-.01em;margin-bottom:1rem;
+}
+.contact-heading .c1{color:var(--c1);}
+.contact-heading .c2{-webkit-text-stroke:2px var(--c4);color:transparent;}
+.contact-sub{color:var(--muted);font-size:1rem;line-height:1.7;max-width:480px;margin:0 auto 3rem;}
+
+.contact-email-big{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(1.4rem,3vw,2.2rem);
+  color:var(--c1);text-decoration:none;display:inline-block;
+  border-bottom:2px solid rgba(255,60,172,.3);padding-bottom:.25rem;
+  transition:border-color .2s;letter-spacing:.02em;
+}
+.contact-email-big:hover{border-color:var(--c1);}
+
+.contact-socials{display:flex;justify-content:center;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;}
+.soc-btn{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.75rem 1.5rem;background:var(--card);border:1px solid var(--border);
+  text-decoration:none;color:var(--text);font-family:'Space Mono',monospace;font-size:.72rem;
+  letter-spacing:.06em;transition:all .2s;
+}
+.soc-btn:hover{border-color:var(--c1);color:var(--c1);background:rgba(255,60,172,.06);}
+.soc-btn.gh:hover{border-color:var(--c5);color:var(--c5);background:rgba(0,245,160,.05);}
+.soc-btn.li:hover{border-color:#5ab3f0;color:#5ab3f0;background:rgba(43,134,197,.05);}
+
+/* ===== FOOTER ===== */
+footer{
+  border-top:1px solid var(--border);padding:2rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  position:relative;z-index:1;
+}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;
+  background:linear-gradient(90deg,var(--c1),var(--c4));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.footer-copy{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);}
+.footer-copy span{color:var(--c1);}
+
+/* ===== REVEAL ===== */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.visible{opacity:1;transform:none;}
+.reveal-left{opacity:0;transform:translateX(-28px);transition:opacity .65s ease,transform .65s ease;}
+.reveal-left.visible{opacity:1;transform:none;}
+.reveal-right{opacity:0;transform:translateX(28px);transition:opacity .65s ease,transform .65s ease;}
+.reveal-right.visible{opacity:1;transform:none;}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--c1);border-radius:2px;}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem;}
+  .nav-links,.hero-badges{display:none;}
+  #hero,#about,#skills,#experience,#contact,#projects{padding:5rem 1.5rem;}
+  .about-grid,.skills-layout,.exp-grid{grid-template-columns:1fr;}
+  .projects-grid{grid-template-columns:1fr;}
+  footer{flex-direction:column;gap:1rem;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-trail"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">SJ</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Hire Me</a>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="hero-bg-text">SJ</div>
+
+  <div class="hero-content reveal">
+    <div class="hero-chip">Open to work · Frontend Developer</div>
+    <div class="hero-greeting">// Hello, world! I'm</div>
+    <h1 class="hero-name">
+      <span class="sher">Sheryar</span><br>
+      <span class="yar">Javed</span>
+    </h1>
+    <p class="hero-title">Frontend Developer · <b>React</b> · Vue · Angular</p>
+    <p class="hero-desc">
+      I design and build fast, beautiful, and accessible web interfaces. 
+      Turning ideas into pixel-perfect, interactive experiences is what gets me out of bed every morning.
+    </p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-main">View My Work →</a>
+      <a href="#contact" class="btn-ghost">Let's Talk</a>
+    </div>
+  </div>
+
+  <div class="hero-badges">
+    <div class="hb reveal"><span>⚛️</span>React 18</div>
+    <div class="hb reveal" style="transition-delay:.1s"><span>💚</span>Vue 3</div>
+    <div class="hb reveal" style="transition-delay:.2s"><span>🔷</span>TypeScript</div>
+    <div class="hb reveal" style="transition-delay:.3s"><span>🎨</span>UI/UX</div>
+    <div class="hb reveal" style="transition-delay:.4s"><span>⚡</span>Performance</div>
+    <div class="hb reveal" style="transition-delay:.5s"><span>📱</span>Responsive</div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">React<span class="dot">✦</span></span>
+    <span class="marquee-item">Vue.js<span class="dot">✦</span></span>
+    <span class="marquee-item">Angular<span class="dot">✦</span></span>
+    <span class="marquee-item">TypeScript<span class="dot">✦</span></span>
+    <span class="marquee-item">Next.js<span class="dot">✦</span></span>
+    <span class="marquee-item">Tailwind CSS<span class="dot">✦</span></span>
+    <span class="marquee-item">Figma<span class="dot">✦</span></span>
+    <span class="marquee-item">GraphQL<span class="dot">✦</span></span>
+    <span class="marquee-item">React<span class="dot">✦</span></span>
+    <span class="marquee-item">Vue.js<span class="dot">✦</span></span>
+    <span class="marquee-item">Angular<span class="dot">✦</span></span>
+    <span class="marquee-item">TypeScript<span class="dot">✦</span></span>
+    <span class="marquee-item">Next.js<span class="dot">✦</span></span>
+    <span class="marquee-item">Tailwind CSS<span class="dot">✦</span></span>
+    <span class="marquee-item">Figma<span class="dot">✦</span></span>
+    <span class="marquee-item">GraphQL<span class="dot">✦</span></span>
+  </div>
+</div>
+
+<!-- ===== ABOUT ===== -->
+<section id="about">
+  <div class="about-grid">
+    <div class="photo-card reveal-left">
+      <div class="photo-frame">
+        <div class="photo-inner">SJ</div>
+        <div class="photo-initials">
+          <div class="initials-big">SJ</div>
+          <div class="initials-label">// Sheryar Javed</div>
+        </div>
+      </div>
+      <div class="photo-accent">FE DEV</div>
+      <div class="photo-tag">📍 Peshawar, Pakistan</div>
+    </div>
+
+    <div class="reveal-right">
+      <span class="section-tag">// 001 — about me</span>
+      <h2 class="section-title">I craft interfaces<br>people <span class="hl">love to use</span></h2>
+      <div class="about-text">
+        <p>Hey! I'm <strong>Sheryar Javed</strong>, a Frontend Developer based in <strong>Peshawar, Pakistan</strong>. I specialise in building modern, performant, and visually stunning web applications with React, Vue, and Angular.</p>
+        <p>My superpower? Bridging the gap between <strong>design and engineering</strong> — I speak both Figma and JavaScript fluently. I obsess over animations, micro-interactions, and loading performance because I believe details make the difference.</p>
+        <p>When I'm not pushing pixels, I'm contributing to open source, exploring new UI libraries, or nerding out over CSS tricks.</p>
+      </div>
+      <div class="about-facts">
+        <div class="fact"><div class="fact-val">3+</div><div class="fact-key">Years Experience</div></div>
+        <div class="fact"><div class="fact-val">25+</div><div class="fact-key">Projects Built</div></div>
+        <div class="fact"><div class="fact-val">10+</div><div class="fact-key">Happy Clients</div></div>
+        <div class="fact"><div class="fact-val">∞</div><div class="fact-key">Cups of Tea ☕</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SKILLS ===== -->
+<section id="skills">
+  <div class="section-header reveal" style="margin-bottom:3.5rem;">
+    <span class="section-tag">// 002 — skills</span>
+    <h2 class="section-title">My <span style="color:var(--c4)">toolkit</span></h2>
+  </div>
+
+  <div class="skills-layout">
+    <div class="reveal-left">
+      <div class="skill-group">
+        <div class="skill-group-name">Frameworks</div>
+        <div class="skill-row">
+          <div class="skill-meta"><span class="skill-name">React / Next.js</span><span class="skill-pct">95%</span></div>
+          <div class="skill-track"><div class="skill-fill" style="width:95%;background:linear-gradient(90deg,var(--c1),var(--c2))"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-meta"><span class="skill-name">Vue 3 / Nuxt</span><span class="skill-pct">88%</span></div>
+          <div class="skill-track"><div class="skill-fill" style="width:88%;background:linear-gradient(90deg,var(--c5),var(--c3))"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-meta"><span class="skill-name">Angular</span><span class="skill-pct">80%</span></div>
+          <div class="skill-track"><div class="skill-fill" style="width:80%;background:linear-gradient(90deg,var(--c6),var(--c1))"></div></div>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-name">Languages</div>
+        <div class="skill-row">
+          <div class="skill-meta"><span class="skill-name">TypeScript</span><span class="skill-pct">92%</span></div>
+          <div class="skill-track"><div class="skill-fill" style="width:92%;background:linear-gradient(90deg,#3178c6,var(--c3))"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-meta"><span class="skill-name">JavaScript (ES2024+)</span><span class="skill-pct">96%</span></div>
+          <div class="skill-track"><div class="skill-fill" style="width:96%;background:linear-gradient(90deg,var(--c4),var(--c6))"></div></div>
+        </div>
+        <div class="skill-row">
+          <div class="skill-meta"><span class="skill-name">CSS / SASS / Tailwind</span><span class="skill-pct">94%</span></div>
+          <div class="skill-track"><div class="skill-fill" style="width:94%;background:linear-gradient(90deg,#06b6d4,var(--c2))"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal-right">
+      <div class="skill-group">
+        <div class="skill-group-name">Tools & Libraries</div>
+        <div class="skill-bubbles">
+          <span class="bubble hot">Redux / Zustand</span>
+          <span class="bubble hot">React Query</span>
+          <span class="bubble warm">Framer Motion</span>
+          <span class="bubble warm">GSAP</span>
+          <span class="bubble cool">Vitest / Jest</span>
+          <span class="bubble cool">Cypress</span>
+          <span class="bubble blue">GraphQL</span>
+          <span class="bubble blue">REST APIs</span>
+          <span class="bubble">Webpack / Vite</span>
+          <span class="bubble">Storybook</span>
+          <span class="bubble hot">Figma</span>
+          <span class="bubble warm">Three.js</span>
+          <span class="bubble cool">PWA</span>
+          <span class="bubble blue">Web Accessibility</span>
+          <span class="bubble">Git / GitHub</span>
+          <span class="bubble">Docker</span>
+          <span class="bubble warm">Vercel / Netlify</span>
+          <span class="bubble">Axios</span>
+        </div>
+      </div>
+
+      <div class="skill-group" style="margin-top:2rem;">
+        <div class="skill-group-name">Soft Skills</div>
+        <div class="skill-bubbles">
+          <span class="bubble hot">UI/UX Thinking</span>
+          <span class="bubble cool">Team Collaboration</span>
+          <span class="bubble warm">Agile / Scrum</span>
+          <span class="bubble blue">Code Review</span>
+          <span class="bubble">Problem Solving</span>
+          <span class="bubble hot">Pixel Perfection</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROJECTS ===== -->
+<section id="projects">
+  <div class="section-header reveal" style="margin-bottom:2rem;">
+    <span class="section-tag">// 003 — projects</span>
+    <h2 class="section-title">Selected <span style="color:var(--c1)">work</span></h2>
+  </div>
+
+  <div class="projects-grid">
+    <!-- Project 1 -->
+    <div class="proj-card p1 reveal">
+      <div class="proj-thumb">
+        <div class="proj-thumb-fill" style="background:linear-gradient(135deg,#1a0a2e,#2d0a3e);">
+          <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+            <rect width="340" height="180" fill="transparent"/>
+            <rect x="20" y="20" width="300" height="140" rx="6" fill="rgba(255,60,172,.08)" stroke="rgba(255,60,172,.2)" stroke-width="1"/>
+            <rect x="30" y="30" width="130" height="60" rx="4" fill="rgba(255,60,172,.12)" stroke="rgba(255,60,172,.25)" stroke-width=".5"/>
+            <text x="95" y="65" text-anchor="middle" fill="#ff3cac" font-family="monospace" font-size="11" opacity=".8">Dashboard</text>
+            <rect x="170" y="30" width="140" height="28" rx="3" fill="rgba(255,221,0,.08)" stroke="rgba(255,221,0,.2)" stroke-width=".5"/>
+            <rect x="170" y="64" width="140" height="26" rx="3" fill="rgba(0,245,160,.06)" stroke="rgba(0,245,160,.15)" stroke-width=".5"/>
+            <!-- bar chart -->
+            <rect x="32" y="100" width="18" height="50" rx="2" fill="rgba(255,60,172,.5)"/>
+            <rect x="56" y="115" width="18" height="35" rx="2" fill="rgba(255,60,172,.35)"/>
+            <rect x="80" y="95" width="18" height="55" rx="2" fill="rgba(255,60,172,.6)"/>
+            <rect x="104" y="110" width="18" height="40" rx="2" fill="rgba(255,60,172,.4)"/>
+            <!-- line chart -->
+            <polyline points="172,115 195,100 218,108 241,88 264,95 287,80 310,70" fill="none" stroke="#ffdd00" stroke-width="1.5" opacity=".7"/>
+            <circle cx="310" cy="70" r="3" fill="#ffdd00"/>
+          </svg>
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-cat" style="color:var(--c1)">React · Dashboard</div>
+        <div class="proj-name">E-Commerce Analytics Hub</div>
+        <div class="proj-desc">A real-time analytics dashboard for online stores featuring dynamic charts, dark/light theme, and live KPI tracking.</div>
+        <div class="proj-stack">
+          <span class="proj-tag">React 18</span><span class="proj-tag">TypeScript</span><span class="proj-tag">Recharts</span><span class="proj-tag">Tailwind</span>
+        </div>
+        <div class="proj-links">
+          <a href="#" class="proj-link" style="color:var(--c1)">↗ Live Demo</a>
+          <a href="#" class="proj-link" style="color:var(--muted)">⌥ GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 2 -->
+    <div class="proj-card p2 reveal" style="transition-delay:.1s">
+      <div class="proj-thumb">
+        <div class="proj-thumb-fill" style="background:linear-gradient(135deg,#1a1500,#2e2200);">
+          <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+            <rect width="340" height="180" fill="transparent"/>
+            <!-- App layout -->
+            <rect x="20" y="20" width="80" height="140" rx="5" fill="rgba(255,221,0,.06)" stroke="rgba(255,221,0,.2)" stroke-width=".5"/>
+            <rect x="110" y="20" width="210" height="140" rx="5" fill="rgba(255,221,0,.04)" stroke="rgba(255,221,0,.12)" stroke-width=".5"/>
+            <!-- Sidebar items -->
+            <rect x="28" y="32" width="64" height="8" rx="4" fill="rgba(255,221,0,.4)"/>
+            <rect x="28" y="50" width="52" height="6" rx="3" fill="rgba(255,255,255,.1)"/>
+            <rect x="28" y="64" width="48" height="6" rx="3" fill="rgba(255,255,255,.08)"/>
+            <rect x="28" y="78" width="55" height="6" rx="3" fill="rgba(255,255,255,.08)"/>
+            <rect x="28" y="92" width="50" height="6" rx="3" fill="rgba(255,255,255,.08)"/>
+            <!-- Cards grid -->
+            <rect x="118" y="30" width="92" height="55" rx="4" fill="rgba(255,221,0,.08)" stroke="rgba(255,221,0,.2)" stroke-width=".5"/>
+            <rect x="218" y="30" width="92" height="55" rx="4" fill="rgba(0,245,160,.05)" stroke="rgba(0,245,160,.15)" stroke-width=".5"/>
+            <rect x="118" y="93" width="192" height="58" rx="4" fill="rgba(255,60,172,.05)" stroke="rgba(255,60,172,.12)" stroke-width=".5"/>
+            <text x="164" y="62" text-anchor="middle" fill="#ffdd00" font-family="monospace" font-size="9" opacity=".7">₨ 240K</text>
+          </svg>
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-cat" style="color:var(--c4)">Vue 3 · SaaS App</div>
+        <div class="proj-name">Fintech Budget Planner</div>
+        <div class="proj-desc">A personal finance tracker with budgeting tools, expense categories, charts, and currency support for Pakistani Rupees.</div>
+        <div class="proj-stack">
+          <span class="proj-tag">Vue 3</span><span class="proj-tag">Pinia</span><span class="proj-tag">Chart.js</span><span class="proj-tag">SCSS</span>
+        </div>
+        <div class="proj-links">
+          <a href="#" class="proj-link" style="color:var(--c4)">↗ Live Demo</a>
+          <a href="#" class="proj-link" style="color:var(--muted)">⌥ GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 3 -->
+    <div class="proj-card p3 reveal" style="transition-delay:.2s">
+      <div class="proj-thumb">
+        <div class="proj-thumb-fill" style="background:linear-gradient(135deg,#001a10,#002a18);">
+          <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+            <rect width="340" height="180" fill="transparent"/>
+            <!-- Phone mockup -->
+            <rect x="120" y="15" width="100" height="155" rx="12" fill="rgba(0,245,160,.06)" stroke="rgba(0,245,160,.25)" stroke-width="1"/>
+            <rect x="130" y="28" width="80" height="130" rx="6" fill="rgba(0,0,0,.3)"/>
+            <!-- App content -->
+            <rect x="134" y="34" width="72" height="12" rx="3" fill="rgba(0,245,160,.4)"/>
+            <rect x="134" y="52" width="72" height="30" rx="4" fill="rgba(0,245,160,.08)" stroke="rgba(0,245,160,.15)" stroke-width=".5"/>
+            <rect x="134" y="88" width="72" height="30" rx="4" fill="rgba(0,245,160,.05)" stroke="rgba(0,245,160,.1)" stroke-width=".5"/>
+            <rect x="134" y="124" width="72" height="28" rx="4" fill="rgba(0,245,160,.3)"/>
+            <text x="170" y="142" text-anchor="middle" fill="#0a0a0f" font-family="monospace" font-size="9" font-weight="bold">Book Now</text>
+            <!-- left elements -->
+            <circle cx="60" cy="60" r="28" fill="rgba(0,245,160,.06)" stroke="rgba(0,245,160,.15)" stroke-width=".5"/>
+            <text x="60" y="65" text-anchor="middle" fill="#00f5a0" font-family="monospace" font-size="9">4.9 ★</text>
+            <circle cx="280" cy="110" r="22" fill="rgba(0,245,160,.06)" stroke="rgba(0,245,160,.15)" stroke-width=".5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-cat" style="color:var(--c5)">React · Mobile-first</div>
+        <div class="proj-name">Service Booking App UI</div>
+        <div class="proj-desc">A mobile-first PWA for booking local services. Smooth animations with Framer Motion, offline support, and a clean design system.</div>
+        <div class="proj-stack">
+          <span class="proj-tag">React</span><span class="proj-tag">Framer Motion</span><span class="proj-tag">PWA</span><span class="proj-tag">Tailwind</span>
+        </div>
+        <div class="proj-links">
+          <a href="#" class="proj-link" style="color:var(--c5)">↗ Live Demo</a>
+          <a href="#" class="proj-link" style="color:var(--muted)">⌥ GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 4 -->
+    <div class="proj-card p4 reveal" style="transition-delay:.05s">
+      <div class="proj-thumb">
+        <div class="proj-thumb-fill" style="background:linear-gradient(135deg,#00081a,#001228);">
+          <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+            <rect width="340" height="180" fill="transparent"/>
+            <rect x="20" y="20" width="300" height="140" rx="6" fill="rgba(43,134,197,.05)" stroke="rgba(43,134,197,.2)" stroke-width=".5"/>
+            <!-- code-like lines -->
+            <rect x="32" y="35" width="40" height="6" rx="2" fill="#5ab3f0" opacity=".6"/>
+            <rect x="78" y="35" width="55" height="6" rx="2" fill="rgba(255,255,255,.15)"/>
+            <rect x="32" y="50" width="10" height="6" rx="2" fill="#ff3cac" opacity=".7"/>
+            <rect x="48" y="50" width="70" height="6" rx="2" fill="rgba(255,255,255,.1)"/>
+            <rect x="32" y="65" width="10" height="6" rx="2" fill="#ff3cac" opacity=".7"/>
+            <rect x="48" y="65" width="90" height="6" rx="2" fill="rgba(255,255,255,.1)"/>
+            <rect x="32" y="80" width="10" height="6" rx="2" fill="#5ab3f0" opacity=".4"/>
+            <!-- design preview -->
+            <rect x="170" y="28" width="138" height="124" rx="4" fill="rgba(43,134,197,.08)" stroke="rgba(43,134,197,.2)" stroke-width=".5"/>
+            <rect x="178" y="38" width="122" height="36" rx="3" fill="rgba(43,134,197,.12)"/>
+            <rect x="178" y="80" width="56" height="20" rx="3" fill="rgba(255,221,0,.15)"/>
+            <rect x="178" y="106" width="122" height="8" rx="2" fill="rgba(255,255,255,.07)"/>
+            <rect x="178" y="118" width="90" height="8" rx="2" fill="rgba(255,255,255,.05)"/>
+          </svg>
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-cat" style="color:#5ab3f0">Angular · Enterprise</div>
+        <div class="proj-name">Component Design System</div>
+        <div class="proj-desc">A reusable UI component library in Angular with Storybook docs, accessibility compliance, and dark/light mode support.</div>
+        <div class="proj-stack">
+          <span class="proj-tag">Angular</span><span class="proj-tag">Storybook</span><span class="proj-tag">SASS</span><span class="proj-tag">WCAG</span>
+        </div>
+        <div class="proj-links">
+          <a href="#" class="proj-link" style="color:#5ab3f0">↗ Storybook</a>
+          <a href="#" class="proj-link" style="color:var(--muted)">⌥ GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 5 -->
+    <div class="proj-card p5 reveal" style="transition-delay:.15s">
+      <div class="proj-thumb">
+        <div class="proj-thumb-fill" style="background:linear-gradient(135deg,#1a0800,#2e1200);">
+          <svg viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+            <rect width="340" height="180" fill="transparent"/>
+            <!-- Portfolio-like layout -->
+            <text x="30" y="60" fill="#ff6b35" font-family="serif" font-size="42" font-weight="bold" opacity=".25">Port</text>
+            <text x="30" y="110" fill="#ff6b35" font-family="serif" font-size="42" font-weight="bold" opacity=".25">folio</text>
+            <rect x="180" y="25" width="140" height="130" rx="5" fill="rgba(255,107,53,.06)" stroke="rgba(255,107,53,.2)" stroke-width=".5"/>
+            <rect x="190" y="35" width="120" height="70" rx="3" fill="rgba(255,107,53,.1)"/>
+            <rect x="190" y="112" width="55" height="7" rx="2" fill="rgba(255,107,53,.4)"/>
+            <rect x="190" y="125" width="100" height="5" rx="2" fill="rgba(255,255,255,.08)"/>
+            <rect x="190" y="135" width="80" height="5" rx="2" fill="rgba(255,255,255,.06)"/>
+            <circle cx="250" cy="70" r="20" fill="rgba(255,107,53,.15)" stroke="rgba(255,107,53,.3)" stroke-width=".5"/>
+            <text x="250" y="75" text-anchor="middle" fill="#ff6b35" font-size="14">✦</text>
+          </svg>
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-cat" style="color:var(--c6)">React · Creative</div>
+        <div class="proj-name">Creative Agency Website</div>
+        <div class="proj-desc">A visually rich agency website with GSAP scroll animations, 3D tilt effects, custom cursors, and a smooth page transition system.</div>
+        <div class="proj-stack">
+          <span class="proj-tag">React</span><span class="proj-tag">GSAP</span><span class="proj-tag">Three.js</span><span class="proj-tag">CSS</span>
+        </div>
+        <div class="proj-links">
+          <a href="#" class="proj-link" style="color:var(--c6)">↗ Live Demo</a>
+          <a href="#" class="proj-link" style="color:var(--muted)">⌥ GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EXPERIENCE ===== -->
+<section id="experience">
+  <div class="section-header reveal" style="margin-bottom:3.5rem;">
+    <span class="section-tag">// 004 — experience</span>
+    <h2 class="section-title">My <span style="color:var(--c5)">journey</span></h2>
+  </div>
+
+  <div class="exp-grid">
+    <div class="timeline reveal-left">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-date" style="color:var(--c1)">2022 — Present</div>
+        <div class="tl-role">Senior Frontend Developer</div>
+        <div class="tl-company">Remote · Freelance & Contracts</div>
+        <div class="tl-desc">Building React and Vue apps for international clients. Architected a component library used across 5 products. Cut load times by 45% through code splitting and lazy loading.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot v2"></div>
+        <div class="tl-date" style="color:var(--c4)">2020 — 2022</div>
+        <div class="tl-role">Frontend Developer</div>
+        <div class="tl-company">Digital Firm · Peshawar</div>
+        <div class="tl-desc">Developed 12+ client websites and web apps. Introduced Vue 3 + TypeScript to the team. Owned the entire frontend of a SaaS product from MVP to launch.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot v3"></div>
+        <div class="tl-date" style="color:var(--c5)">2019 — 2020</div>
+        <div class="tl-role">Junior Web Developer</div>
+        <div class="tl-company">Agency · Peshawar</div>
+        <div class="tl-desc">Built responsive landing pages, e-commerce storefronts, and WordPress themes. First real exposure to JavaScript frameworks — fell in love with React instantly.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot v4"></div>
+        <div class="tl-date" style="color:#5ab3f0">2015 — 2019</div>
+        <div class="tl-role">BS Computer Science</div>
+        <div class="tl-company">University of Peshawar</div>
+        <div class="tl-desc">Graduated with distinction. Won university-level hackathon. Built my first React project in final year — a study planner that 200+ students used.</div>
+      </div>
+    </div>
+
+    <div class="reveal-right">
+      <div class="chart-title">Tech Focus</div>
+
+      <div class="donut-wrap">
+        <svg viewBox="0 0 160 160" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+          <!-- React 40% -->
+          <circle cx="80" cy="80" r="60" fill="none" stroke="#ff3cac" stroke-width="22"
+            stroke-dasharray="150.8 226.2" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+          <!-- Vue 28% -->
+          <circle cx="80" cy="80" r="60" fill="none" stroke="#ffdd00" stroke-width="22"
+            stroke-dasharray="105.6 271.4" stroke-dashoffset="-150.8" transform="rotate(-90 80 80)"/>
+          <!-- Angular 20% -->
+          <circle cx="80" cy="80" r="60" fill="none" stroke="#00f5a0" stroke-width="22"
+            stroke-dasharray="75.4 301.6" stroke-dashoffset="-256.4" transform="rotate(-90 80 80)"/>
+          <!-- Other 12% -->
+          <circle cx="80" cy="80" r="60" fill="none" stroke="#784ba0" stroke-width="22"
+            stroke-dasharray="45.2 331.8" stroke-dashoffset="-331.8" transform="rotate(-90 80 80)"/>
+          <circle cx="80" cy="80" r="49" fill="#111118"/>
+          <text x="80" y="77" text-anchor="middle" fill="white" font-family="Bebas Neue,sans-serif" font-size="18">TECH</text>
+          <text x="80" y="93" text-anchor="middle" fill="#888899" font-family="monospace" font-size="9">SPLIT</text>
+        </svg>
+
+        <div class="donut-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--c1)"></div>
+            <span class="legend-label">React / Next</span>
+            <span class="legend-pct">40%</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--c4)"></div>
+            <span class="legend-label">Vue / Nuxt</span>
+            <span class="legend-pct">28%</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--c5)"></div>
+            <span class="legend-label">Angular</span>
+            <span class="legend-pct">20%</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--c2)"></div>
+            <span class="legend-label">Other</span>
+            <span class="legend-pct">12%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="passion-grid">
+        <div class="passion-item"><span class="passion-icon">🎨</span><span class="passion-name">UI/UX Design</span></div>
+        <div class="passion-item"><span class="passion-icon">⚡</span><span class="passion-name">Performance</span></div>
+        <div class="passion-item"><span class="passion-icon">♿</span><span class="passion-name">Accessibility</span></div>
+        <div class="passion-item"><span class="passion-icon">✨</span><span class="passion-name">Animations</span></div>
+        <div class="passion-item"><span class="passion-icon">📦</span><span class="passion-name">Open Source</span></div>
+        <div class="passion-item"><span class="passion-icon">🧪</span><span class="passion-name">Testing</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact">
+  <div class="contact-inner reveal">
+    <span class="contact-eyebrow">// 005 — let's connect</span>
+    <h2 class="contact-heading">
+      <span class="c1">Got a</span><br>
+      <span class="c2">project?</span>
+    </h2>
+    <p class="contact-sub">Whether you need a stunning web app, a blazing-fast React frontend, or just want to talk UI — I'm always happy to chat!</p>
+    <a href="mailto:sheryar@email.com" class="contact-email-big">sheryar@email.com →</a>
+
+    <div class="contact-socials">
+      <a href="#" class="soc-btn li">
+        <span>🔗</span> LinkedIn
+      </a>
+      <a href="#" class="soc-btn gh">
+        <span>💻</span> GitHub
+      </a>
+      <a href="#" class="soc-btn">
+        <span>𝕏</span> Twitter / X
+      </a>
+      <a href="#" class="soc-btn" style="border-color:rgba(255,60,172,.3);color:var(--c1);">
+        <span>📄</span> Download CV
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Sheryar Javed</div>
+  <div class="footer-copy">Built with <span>♥</span> · <span>2025</span> · Peshawar 🇵🇰</div>
+  <a href="#hero" style="font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);text-decoration:none;">↑ Top</a>
+</footer>
+
+<script>
+// Cursor
+const cur = document.getElementById('cur');
+const trail = document.getElementById('cur-trail');
+let mx=0,my=0,tx=0,ty=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function tick(){
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+  tx+=(mx-tx)*.1; ty+=(my-ty)*.1;
+  trail.style.left=tx+'px'; trail.style.top=ty+'px';
+  requestAnimationFrame(tick);
+})();
+document.querySelectorAll('a,button,.proj-card,.skill-card,.soc-btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(3)';trail.style.transform='translate(-50%,-50%) scale(1.4)';});
+  el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';trail.style.transform='translate(-50%,-50%) scale(1)';});
+});
+
+// Scroll reveal
+const all = document.querySelectorAll('.reveal,.reveal-left,.reveal-right');
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'),i*70);
+  });
+},{threshold:0.08});
+all.forEach(el=>obs.observe(el));
+
+// Animate skill bars on scroll
+const bars = document.querySelectorAll('.skill-fill');
+const barObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){const w=e.target.style.width;e.target.style.width='0';setTimeout(()=>e.target.style.width=w,100);}});
+},{threshold:0.5});
+bars.forEach(b=>barObs.observe(b));
+</script>
+</body>
+</html>
